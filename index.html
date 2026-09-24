@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CCNA Drills</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#12161B">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CCNA">
+<link rel="apple-touch-icon" href="./icon-180.png">
+<link rel="icon" href="./icon-192.png">
+<style>
+:root{
+  --bg:#12161B; --surface:#1A2129; --raise:#232D37; --line:#2B3742;
+  --ink:#E9EFF4; --dim:#8FA0AF; --faint:#607282;
+  --ok:#4FBFA4; --warn:#E8B54A; --alert:#E8574B;
+  --accent:#4C9BE8; --on-accent:#0B1117;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --pad:16px; --r:14px;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){
+  :root{
+    --bg:#F3F5F7; --surface:#FFFFFF; --raise:#E9EDF1; --line:#D7DEE5;
+    --ink:#131A21; --dim:#56667A; --faint:#8494A5;
+    --ok:#1F8F74; --warn:#B07A10; --alert:#C8382C; --accent:#2F7BC0; --on-accent:#FFFFFF;
+    color-scheme:light;
+  }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--sans)}
+body{font-size:17px;line-height:1.4;overscroll-behavior-y:none;-webkit-font-smoothing:antialiased;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+body.drilling{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+body.drilling nav{display:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;padding:0}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.wrap{padding:var(--pad);padding-top:calc(var(--pad) + env(safe-area-inset-top));max-width:760px;margin:0 auto}
+h1{font-size:28px;font-weight:750;margin:4px 0 14px;letter-spacing:-.02em;display:flex;justify-content:space-between;align-items:center;gap:10px}
+h2{font-size:19px;font-weight:700;margin:24px 0 10px}
+h3{font-size:15px;font-weight:650;margin:0 0 8px;color:var(--dim)}
+p{margin:0 0 8px}
+.screen{display:none}
+.screen.on{display:block;animation:in .2s ease-out}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:10px}
+.card.tap{cursor:pointer;width:100%;text-align:left;display:block}
+.card.tap:active{background:var(--raise)}
+.muted{color:var(--dim);font-size:15px}
+.tiny{font-size:13px;color:var(--faint)}
+.ok{color:var(--ok)} .bad{color:var(--alert)} .warn{color:var(--warn)}
+.pill{display:inline-block;font-size:12px;padding:3px 9px;border-radius:20px;border:1px solid var(--line);color:var(--dim);white-space:nowrap;vertical-align:middle}
+.pill.good{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 45%,var(--line))}
+.pill.bad{color:var(--alert);border-color:color-mix(in srgb,var(--alert) 45%,var(--line))}
+.pill.warn{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 45%,var(--line))}
+.pill.blue{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.empty{border:1px dashed var(--line);border-radius:var(--r);padding:22px 18px;text-align:center;color:var(--dim);font-size:15px;margin-bottom:10px}
+.note{font-size:14px;color:var(--warn);background:color-mix(in srgb,var(--warn) 9%,transparent);border-left:3px solid var(--warn);padding:10px 12px;border-radius:0 8px 8px 0;margin:0 0 12px}
+
+.btn{background:var(--raise);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:16px;font-weight:650;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;line-height:22px;text-align:center}
+.btn:active{filter:brightness(1.15)}
+.btn.wide{display:flex;width:100%;margin-top:10px}
+.btn.go{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.small{min-height:40px;padding:8px 12px;font-size:14px;border-radius:10px}
+.btn.danger{color:var(--alert)}
+.row{display:flex;gap:8px;align-items:center}
+.row>*{flex:1;min-width:0}
+.row>.fix{flex:0 0 auto}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+select,input:not([type=checkbox]):not([type=file]){background:var(--raise);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:12px 13px;font-size:16px;width:100%;-webkit-appearance:none;appearance:none;font-family:inherit;min-height:48px}
+input[type=file]{display:none}
+label.f{display:block;font-size:13px;color:var(--dim);margin:10px 0 4px}
+.seg{display:flex;gap:6px}
+.seg button{flex:1;padding:10px 8px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-size:15px;font-weight:650;color:var(--dim);min-height:44px}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.toggle{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.toggle input{width:26px;height:26px;accent-color:var(--accent);flex:none}
+
+/* home */
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.hero button{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 14px;text-align:left;min-height:96px}
+.hero button:first-child{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.hero b{display:block;font-size:22px;font-weight:750;letter-spacing:-.02em}
+.hero span{font-size:14px;opacity:.8}
+.day{display:flex;gap:12px;align-items:center}
+.day .dn{font-family:var(--mono);font-size:30px;font-weight:750;min-width:52px;color:var(--accent)}
+.bar{height:8px;border-radius:5px;background:var(--raise);overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:5px;transition:width .4s}
+.dom{padding:10px 0;border-bottom:1px solid var(--line)}
+.dom:last-child{border-bottom:none}
+.dom .top{display:flex;justify-content:space-between;gap:10px;font-size:15px}
+.dom.off{opacity:.5}
+.stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 12px}
+.tile .v{font-family:var(--mono);font-size:24px;font-weight:750;letter-spacing:-.03em;line-height:1.1}
+.tile .k{font-size:12px;color:var(--dim);margin-top:3px}
+
+/* lists */
+.li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 2px;border-bottom:1px solid var(--line);width:100%;text-align:left}
+.li:last-child{border-bottom:none}
+.li .main{min-width:0;flex:1}
+.li .nm{font-weight:650;font-size:16px}
+.li .sub{font-size:13px;color:var(--faint);margin-top:2px}
+.li .side{text-align:right;font-size:13px;color:var(--dim);flex:none;font-family:var(--mono)}
+.li.locked .nm{color:var(--faint)}
+.lvl{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:7px;vertical-align:1px;background:var(--line)}
+.lvl.l1{background:var(--alert)} .lvl.l2{background:var(--warn)} .lvl.l3{background:var(--ok)} .lvl.l4{background:var(--accent)}
+.cday{display:flex;align-items:center;gap:12px;padding:11px 2px;border-bottom:1px solid var(--line);width:100%;text-align:left}
+.cday:last-child{border-bottom:none}
+.cday .n{font-family:var(--mono);font-size:14px;color:var(--faint);width:34px;flex:none}
+.cday .t{flex:1;min-width:0;font-size:15px}
+.cday .chk{width:24px;height:24px;border-radius:7px;border:2px solid var(--faint);flex:none;position:relative}
+.cday.done .chk{background:var(--ok);border-color:var(--ok)}
+.cday.done .chk::after{content:"";position:absolute;left:7px;top:2px;width:6px;height:12px;border:solid var(--bg);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+.cday.done .t{color:var(--dim)}
+.cday.cur{background:color-mix(in srgb,var(--accent) 12%,transparent);border-radius:10px;padding-left:8px;padding-right:8px}
+.cday.cur .n{color:var(--accent)}
+.bars{display:flex;align-items:flex-end;gap:4px;height:90px;margin:6px 0 2px}
+.bcol{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px;min-width:0;height:100%}
+.bfill{width:100%;background:var(--accent);border-radius:3px 3px 0 0;min-height:2px}
+.bfill.zero{background:var(--line)}
+.blab{font-size:10px;color:var(--faint);font-family:var(--mono)}
+
+/* drill */
+.dhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.clock{font-family:var(--mono);font-size:22px;font-weight:750}
+.clock.low{color:var(--warn)}
+.score{font-family:var(--mono);font-size:14px;color:var(--dim)}
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.qtopic{font-size:13px;color:var(--accent);font-weight:650;margin-bottom:6px}
+.qtext{font-size:18px;line-height:1.45}
+.qtext code,.mono{font-family:var(--mono);font-size:.95em;background:var(--raise);padding:1px 6px;border-radius:6px;word-break:break-all}
+.qtext .big{display:block;font-family:var(--mono);font-size:22px;font-weight:700;margin:10px 0 2px;word-break:break-all;background:none;padding:0}
+.field{margin-bottom:10px}
+.field label{display:block;font-size:13px;color:var(--dim);margin-bottom:4px}
+.field input{font-family:var(--mono);font-size:19px}
+.field input.good{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 10%,var(--raise))}
+.field input.wrong{border-color:var(--alert);background:color-mix(in srgb,var(--alert) 10%,var(--raise))}
+.field .fix-ans{font-family:var(--mono);font-size:14px;color:var(--ok);margin-top:4px}
+.keys{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.keys button{min-width:42px;height:38px;border-radius:9px;background:var(--surface);border:1px solid var(--line);font-family:var(--mono);font-size:16px;font-weight:700;padding:0 8px}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.choices button{background:var(--surface);border:1px solid var(--line);border-radius:12px;min-height:56px;padding:10px;font-size:16px;font-weight:650}
+.choices button.good{border-color:var(--ok);color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,var(--surface))}
+.choices button.wrong{border-color:var(--alert);color:var(--alert);background:color-mix(in srgb,var(--alert) 12%,var(--surface))}
+.verdict{font-size:20px;font-weight:750;margin:4px 0 8px}
+.expl{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:0 12px 12px 0;padding:12px 14px;font-size:15px;line-height:1.55;margin-bottom:12px}
+.expl p{margin:0 0 6px} .expl p:last-child{margin:0}
+.expl code{font-family:var(--mono);font-size:.95em}
+.expl table{border-collapse:collapse;font-size:13px;width:100%;margin-top:6px}
+.expl td,.expl th{padding:5px 4px;border-bottom:1px solid var(--line);text-align:left;font-family:var(--mono)}
+.expl th{font-family:var(--sans);color:var(--dim);font-weight:600}
+.bits{font-family:var(--mono);letter-spacing:.06em}
+.bits b{color:var(--accent)}
+.timesup{background:color-mix(in srgb,var(--warn) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--warn) 45%,var(--line));color:var(--warn);border-radius:12px;padding:10px 12px;font-size:15px;margin-bottom:10px}
+
+/* sheet, toast, nav */
+#sheet{position:fixed;inset:0;z-index:40;display:none}
+#sheet.on{display:block}
+#sheet .scrim{position:absolute;inset:0;background:rgba(0,0,0,.5);animation:fade .2s}
+#sheet .panel{position:absolute;left:0;right:0;bottom:0;max-height:92vh;overflow-y:auto;background:var(--bg);border-radius:20px 20px 0 0;padding:8px var(--pad) calc(24px + env(safe-area-inset-bottom));animation:up .25s cubic-bezier(.2,.8,.2,1);max-width:760px;margin:0 auto;border-top:1px solid var(--line)}
+#sheet .grab{width:40px;height:5px;border-radius:3px;background:var(--line);margin:4px auto 10px}
+#sheet .sh{display:flex;justify-content:space-between;align-items:center;gap:10px;position:sticky;top:-8px;background:var(--bg);padding:6px 0 8px;z-index:2}
+#sheet .sh b{font-size:20px}
+@keyframes up{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+@keyframes fade{from{opacity:0}}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom));z-index:50;background:var(--ink);color:var(--bg);padding:10px 12px 10px 16px;border-radius:14px;display:none;align-items:center;gap:14px;font-size:15px;box-shadow:0 8px 30px rgba(0,0,0,.35);max-width:92vw}
+#toast.on{display:flex;animation:up .2s}
+#toast button{font-weight:800;color:var(--accent);padding:6px 8px;filter:brightness(.8)}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:30}
+nav button{flex:1;padding:10px 2px 12px;font-size:11px;color:var(--faint);display:flex;flex-direction:column;align-items:center;gap:4px;min-height:62px}
+nav button[aria-current="true"]{color:var(--ink)}
+nav svg,.icon-btn svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.icon-btn{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--surface);border:1px solid var(--line)}
+</style>
+</head>
+<body>
+
+<main>
+<section id="s-home" class="screen on"><div class="wrap"><h1><span>CCNA</span><button class="icon-btn" id="opensettings" aria-label="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg></button></h1><div id="home"></div></div></section>
+<section id="s-practice" class="screen"><div class="wrap"><h1>Practice</h1><div id="practice"></div></div></section>
+<section id="s-course" class="screen"><div class="wrap"><h1>Course</h1><div id="course"></div></div></section>
+<section id="s-stats" class="screen"><div class="wrap"><h1>Stats</h1><div id="stats"></div></div></section>
+<section id="s-settings" class="screen"><div class="wrap"><h1>Settings</h1><div id="settings"></div></div></section>
+<section id="s-drill" class="screen"><div class="wrap"><div id="drill"></div></div></section>
+</main>
+
+<div id="toast" role="status"><span id="toast-msg"></span><button id="toast-btn">Undo</button></div>
+<div id="sheet" role="dialog" aria-modal="true"><div class="scrim"></div><div class="panel"><div class="grab"></div>
+<div class="sh"><b id="sheet-title"></b><button class="btn small" id="sheet-close">Close</button></div><div id="sheet-body"></div></div></div>
+
+<nav>
+<button data-tab="home" aria-current="true"><svg viewBox="0 0 24 24"><path d="M4 11l8-6.5 8 6.5V20H4z"/><path d="M10 20v-5h4v5"/></svg>Home</button>
+<button data-tab="practice"><svg viewBox="0 0 24 24"><path d="M13 3L5 13.5h6L10 21l8-10.5h-6z"/></svg>Practice</button>
+<button data-tab="course"><svg viewBox="0 0 24 24"><rect x="4" y="3.5" width="16" height="17" rx="2.5"/><path d="M8 8.5h8M8 12.5h8M8 16.5h5"/></svg>Course</button>
+<button data-tab="stats"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 16v-5M12 16V8M16 16v-3"/></svg>Stats</button>
+</nav>
+
+<script>
+/* =====================================================================
+   helpers
+   ===================================================================== */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const chance=p=>Math.random()<p;
+const pad2=n=>String(n).padStart(2,'0');
+const dayKey=ts=>{const d=new Date(ts);return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate())};
+const todayKey=()=>dayKey(Date.now());
+const pct=x=>x==null||!isFinite(x)?'—':Math.round(x*100)+'%';
+const secs=ms=>ms==null?'—':(ms<10000?(ms/1000).toFixed(1):Math.round(ms/1000))+'s';
+function ago(ts){ if(!ts) return 'never'; const m=Math.floor((Date.now()-ts)/60000);
+  if(m<1) return 'just now'; if(m<60) return m+' min ago'; const h=Math.floor(m/60); if(h<24) return h+(h===1?' hour ago':' hours ago');
+  const d=Math.floor(h/24); return d+(d===1?' day ago':' days ago') }
+function buzz(ms){ if(navigator.vibrate) try{navigator.vibrate(ms||8)}catch(e){} }
+const sig=s=>{let h=5381;for(let i=0;i<s.length;i++)h=((h*33)^s.charCodeAt(i))>>>0;return s.length+':'+h};
+
+/* ----- IPv4 math ----- */
+function ip2n(s){ const p=String(s).trim().split('.'); if(p.length!==4) return null; let n=0;
+  for(const x of p){ if(!/^\d{1,3}$/.test(x)) return null; const v=+x; if(v>255) return null; n=n*256+v } return n }
+const n2ip=n=>[n>>>24,(n>>>16)&255,(n>>>8)&255,n&255].join('.');
+const oct=n=>[n>>>24,(n>>>16)&255,(n>>>8)&255,n&255];
+const pmask=p=>p<=0?0:(0xFFFFFFFF<<(32-p))>>>0;
+const netOf=(ip,p)=>(ip&pmask(p))>>>0;
+const bcOf=(ip,p)=>(netOf(ip,p)|(~pmask(p)>>>0))>>>0;
+const hostsOf=p=>Math.pow(2,32-p)-2;
+function parseIpP(s){ const m=String(s).trim().match(/^([\d.]+)\s*[\/\s]\s*(\d{1,2})$/); if(!m) return null; const ip=ip2n(m[1]); const p=+m[2]; return ip==null||p>32?null:{ip,p} }
+const bin8=v=>v.toString(2).padStart(8,'0');
+function randIP(){
+  const k=Math.random();
+  if(k<.25) return ip2n('10.'+ri(0,255)+'.'+ri(0,255)+'.'+ri(0,255));
+  if(k<.45) return ip2n('172.'+ri(16,31)+'.'+ri(0,255)+'.'+ri(0,255));
+  if(k<.7) return ip2n('192.168.'+ri(0,255)+'.'+ri(0,255));
+  let a; do{ a=ri(1,223) }while(a===127||a===10);
+  return ip2n(a+'.'+ri(0,255)+'.'+ri(0,255)+'.'+ri(0,255));
+}
+function randPrefix(){ const k=Math.random(); return k<.55?ri(24,30):k<.85?ri(16,23):ri(9,15) }
+/* an address that isn't the network or broadcast, so the question always has a real host */
+function randHost(p){ let ip; for(let i=0;i<50;i++){ ip=randIP(); if(p>=31||(ip!==netOf(ip,p)&&ip!==bcOf(ip,p))) return ip } return ip }
+function maskExpl(p){
+  const full=Math.floor(p/8), rem=p%8, v=rem?256-Math.pow(2,8-rem):0;
+  const parts=[]; for(let i=0;i<4;i++) parts.push(i<full?'255':i===full?String(v):'0');
+  return '<p>/'+p+' = '+full+' full octet'+(full===1?'':'s')+' of 1s'+(rem?' plus '+rem+' more bit'+(rem>1?'s':'')+' in octet '+(full+1)+' ('+[128,64,32,16,8,4,2,1].slice(0,rem).join('+')+' = '+v+')':'')+', so the mask is <code>'+parts.join('.')+'</code>.</p>';
+}
+function netExpl(ip,p,show){
+  const m=pmask(p), o=oct(ip), mo=oct(m); let h=maskExpl(p);
+  if(p%8===0){ h+='<p>/'+p+' ends exactly on an octet boundary, so keep the first '+(p/8)+' octet'+(p===8?'':'s')+'. Network: the rest become 0. Broadcast: the rest become 255.</p>' }
+  else{
+    const k=Math.floor(p/8), B=256-mo[k], x=o[k], s=Math.floor(x/B)*B;
+    h+='<p>The interesting octet is octet '+(k+1)+' (mask '+mo[k]+'), so the block size is 256 − '+mo[k]+' = <b>'+B+'</b>. Blocks go 0, '+B+', '+(2*B)+'…</p>'+
+       '<p>'+x+' falls in the <b>'+s+'–'+(s+B-1)+'</b> block. The network uses the start ('+s+') with zeros after it. The broadcast uses the end ('+(s+B-1)+') with 255s after it.</p>';
+  }
+  const n=netOf(ip,p), b=bcOf(ip,p);
+  if(show!=='short') h+='<p>Network <code>'+n2ip(n)+'</code>, broadcast <code>'+n2ip(b)+'</code>'+(p<31?', usable <code>'+n2ip(n+1)+'</code> to <code>'+n2ip(b-1)+'</code>, '+hostsOf(p).toLocaleString()+' hosts (2<sup>'+(32-p)+'</sup> − 2)':'')+'.</p>';
+  return h;
+}
+
+/* ----- IPv6 math ----- */
+function v6parse(s){
+  s=String(s).trim().toLowerCase().replace(/\s+/g,'').replace(/\/\d+$/,'');
+  if(!s||!/^[0-9a-f:]+$/.test(s)) return null;
+  const d=s.split('::'); if(d.length>2) return null;
+  const L=d[0]?d[0].split(':'):[], R=d.length===2&&d[1]?d[1].split(':'):[];
+  if(d.length===1&&L.length!==8) return null;
+  if(d.length===2&&L.length+R.length>7) return null;
+  const g=[...L,...Array(d.length===2?8-L.length-R.length:0).fill('0'),...R];
+  if(g.length!==8||g.some(x=>!/^[0-9a-f]{1,4}$/.test(x))) return null;
+  return g.map(x=>parseInt(x,16));
+}
+function zeroRuns(g){ const runs=[]; let i=0; while(i<8){ if(g[i]===0){ let j=i; while(j<8&&g[j]===0) j++; runs.push([i,j-i]); i=j } else i++ } return runs }
+function v6canon(g){
+  const runs=zeroRuns(g).filter(r=>r[1]>=2); let best=null; for(const r of runs) if(!best||r[1]>best[1]) best=r;
+  const h=g.map(x=>x.toString(16));
+  if(!best) return h.join(':');
+  return h.slice(0,best[0]).join(':')+'::'+h.slice(best[0]+best[1]).join(':');
+}
+const v6full=g=>g.map(x=>x.toString(16).padStart(4,'0')).join(':');
+const sameG=(a,b)=>a&&b&&a.every((x,i)=>x===b[i]);
+/* "fully shortened": no leading zeros, and :: (if used) covers a longest zero run */
+function v6checkShort(str,g){
+  const s=str.trim().toLowerCase(), notes=[];
+  const toks=s.split('::').join(':').split(':').filter(Boolean);
+  if(toks.some(t=>t.length>1&&t[0]==='0')) return {ok:false,why:'Leading zeros are still there. Drop them from every group (0db8 → db8, 0000 → 0).'};
+  const runs=zeroRuns(g), longest=Math.max(0,...runs.map(r=>r[1]));
+  const d=s.split('::');
+  if(longest>=2){
+    if(d.length<2) return {ok:false,why:'There\'s a run of all-zero groups. Replace the longest run with ::.'};
+    const L=d[0]?d[0].split(':').length:0, R=d[1]?d[1].split(':').length:0, used=8-L-R;
+    if(used<longest) return {ok:false,why:'The :: should replace the longest run of zero groups ('+longest+' groups), not a shorter one.'};
+    if(v6canon(g)!==s) notes.push('Both runs are the same length. RFC 5952 (the rule in Day 33) puts the :: on the left one: <code>'+v6canon(g)+'</code>.');
+  } else if(d.length===2) notes.push('There\'s only one zero group here. RFC 5952 says to write it as 0 rather than use :: for a single group.');
+  if(/[A-F]/.test(str)) notes.push('RFC 5952 also says to write a–f in lowercase.');
+  return {ok:true,notes};
+}
+function randV6(){
+  const style=pick(['doc','doc','gua','ula','ll']);
+  let g=Array.from({length:8},()=>chance(.35)?ri(1,0xfff):ri(0x1000,0xffff));
+  if(style==='doc'){ g[0]=0x2001; g[1]=0x0db8 }
+  if(style==='gua'){ g[0]=ri(0x2000,0x3fff) }
+  if(style==='ula'){ g[0]=ri(0xfd00,0xfdff) }
+  if(style==='ll'){ g=[0xfe80,0,0,0,...g.slice(4)] }
+  if(style!=='ll'){
+    const len=ri(2,4), start=ri(2,8-len); for(let i=start;i<start+len;i++) g[i]=0;
+    if(chance(.25)){ const free=[2,3,4,5,6,7].filter(i=>g[i]!==0&&g[i-1]!==0&&(i===7||g[i+1]!==0)); if(free.length) g[pick(free)]=0 }
+    if(chance(.2)){ g=[g[0],g[1],0,0,ri(1,0xffff),0,0,ri(1,0xffff)] }
+  }
+  return g;
+}
+
+/* =====================================================================
+   course (day order and titles from Jeremy's IT Lab CCNA course)
+   ===================================================================== */
+const COURSE=[
+ ['1','Network Devices'],['2','Interfaces and Cables'],['3','OSI Model & TCP/IP Suite'],['4','Intro to the CLI'],
+ ['5','Ethernet LAN Switching, Part 1'],['6','Ethernet LAN Switching, Part 2'],['7','IPv4 Addressing, Part 1'],['8','IPv4 Addressing, Part 2'],
+ ['9','Switch Interfaces'],['10','The IPv4 Header'],['11a','Routing Fundamentals'],['11b','Static Routing'],['12','Life of a Packet'],
+ ['13','Subnetting, Part 1'],['14','Subnetting, Part 2'],['15','Subnetting (VLSM), Part 3'],['16','VLANs, Part 1'],['17','VLANs, Part 2'],
+ ['18','VLANs, Part 3'],['19','DTP & VTP',1],['20','Spanning Tree, Part 1'],['21','Spanning Tree, Part 2'],['22','Rapid Spanning Tree'],
+ ['23','EtherChannel'],['24','Dynamic Routing'],['25','RIP and EIGRP'],['26','OSPF, Part 1'],['27','OSPF, Part 2'],['28','OSPF, Part 3'],
+ ['29','First Hop Redundancy Protocols'],['30','TCP and UDP'],['31','IPv6, Part 1'],['32','IPv6, Part 2'],['33','IPv6, Part 3'],
+ ['34','Standard ACLs'],['35','Extended ACLs'],['36','CDP and LLDP'],['37','NTP'],['38','DNS'],['39','DHCP'],['40','SNMP'],['41','Syslog'],
+ ['42','SSH'],['43','FTP and TFTP'],['44','NAT, Part 1 (Static)'],['45','NAT, Part 2 (Dynamic)'],['46','QoS, Part 1 (Voice VLANs)'],
+ ['47','QoS, Part 2'],['48','Security Fundamentals'],['49','Port Security'],['50','DHCP Snooping'],['51','Dynamic ARP Inspection'],
+ ['52','LAN Architectures'],['53','WAN Architectures'],['54a','Virtualization and Cloud'],['54b','Containers'],['54c','VRF'],
+ ['55','Wireless Fundamentals'],['56','Wireless Architectures'],['57','Wireless Security'],['58','Wireless Configuration'],
+ ['59','Intro to Network Automation'],['60','JSON, XML, and YAML'],['61','REST APIs'],['62','Software-Defined Networking'],['63','Ansible, Puppet, and Chef']
+].map(([id,title,off],i)=>({id,title,off:!!off,i}));
+const dayIdx=id=>COURSE.findIndex(c=>c.id===id);
+
+const DOMAINS={
+  v11:[['Network Fundamentals',20],['Network Access',20],['IP Connectivity',25],['IP Services',10],['Security Fundamentals',15],['Automation & Programmability',10]],
+  v20:[['Network Infrastructure & Connectivity',25],['Switching & Network Access',25],['IP Routing',20],['Network Services & Security',20],['AI, Network Ops & Management',10]]
+};
+
+/* =====================================================================
+   drills. Each gen() returns a question:
+     prompt  – html
+     fields  – [{k,label,kb,ph}]  (kb: num | ip | ipp | bin | hex | v6)
+     choices – [{v,label}] for tap answers (instead of fields)
+     sol     – {k:answer} (or the choice value): what we show as the answer
+     grade(ans) – {ok, marks:{k:bool}, notes:[html]}
+     expl    – html worked answer
+   ===================================================================== */
+const TOPICS=[['bh','Binary & hex'],['v4','IPv4 addressing & subnetting'],['v6','IPv6']];
+const one=(k,label,kb,ph)=>[{k,label,kb,ph}];
+function gradeEq(sol,ans,norm){ const marks={}; let ok=true; for(const k in sol){ const m=norm(ans[k]??'',k)===norm(sol[k],k); marks[k]=m; if(!m) ok=false } return {ok,marks} }
+const nIP=v=>{ const n=ip2n(v); return n==null?'x':String(n) };
+const nNum=v=>String(v).replace(/[\s,\/]/g,'').replace(/^0+(?=\d)/,'');
+function ipFields(sol){ return a=>gradeEq(sol,a,(v,k)=>k==='hosts'?nNum(v):nIP(v)) }
+
+const DRILLS=[
+{id:'bin',name:'Binary ↔ decimal',topic:'bh',day:'7',obj:{v11:'1.6',v20:'1.3'},gen(){
+  const v=ri(0,255);
+  if(chance(.5)) return {prompt:'Convert this octet to decimal:<span class="big">'+bin8(v).replace(/(\d{4})/,'$1 ')+'</span>',
+    fields:one('a','Decimal','num','0–255'),sol:{a:String(v)},grade:a=>gradeEq({a:String(v)},a,nNum),
+    expl:'<p>Add the place values where there\'s a 1:</p><p class="bits">'+[128,64,32,16,8,4,2,1].map((p,i)=>bin8(v)[i]==='1'?'<b>'+p+'</b>':'<span style="opacity:.35">'+p+'</span>').join(' ')+'</p><p>'+([128,64,32,16,8,4,2,1].filter((p,i)=>bin8(v)[i]==='1').join(' + ')||'0')+' = <b>'+v+'</b></p>'};
+  return {prompt:'Convert to an 8-bit binary octet:<span class="big">'+v+'</span>',fields:one('a','Binary (8 bits)','bin','e.g. 11000000'),
+    sol:{a:bin8(v)},grade:a=>gradeEq({a:bin8(v)},a,x=>{ const s=String(x).replace(/\s/g,''); return /^[01]{1,8}$/.test(s)?s.padStart(8,'0'):'x' }),
+    expl:'<p>Walk the place values left to right, subtracting when it fits:</p><p>'+(()=>{let r=v;return [128,64,32,16,8,4,2,1].map(p=>{ if(r>=p){ const t=r+' − '+p+' = '+(r-p)+' → 1'; r-=p; return p+': '+t } return p+': '+r+' is less than '+p+' → 0' }).join('<br>')})()+'</p><p>Answer <b class="bits">'+bin8(v)+'</b></p>'};
+}},
+{id:'class',name:'Address classes',topic:'v4',day:'7',obj:{v11:'1.6',v20:'1.3'},gen(){
+  const c=pick(['A','A','B','B','C','C','D','E','L']);
+  const r={A:[1,126],B:[128,191],C:[192,223],D:[224,239],E:[240,255],L:[127,127]}[c];
+  const ip=ri(r[0],r[1])+'.'+ri(0,255)+'.'+ri(0,255)+'.'+ri(1,254);
+  const choices=[['A','Class A'],['B','Class B'],['C','Class C'],['D','Class D'],['E','Class E'],['L','Loopback']].map(([v,label])=>({v,label}));
+  return {prompt:'Which class is this address?<span class="big">'+ip+'</span>',choices,sol:c,grade:a=>({ok:a===c}),
+    expl:'<p>Look at the first octet: <b>'+ip.split('.')[0]+'</b>.</p><table><tr><th>First octet</th><th>Class</th></tr><tr><td>1–126</td><td>A (/8)</td></tr><tr><td>127</td><td>Loopback</td></tr><tr><td>128–191</td><td>B (/16)</td></tr><tr><td>192–223</td><td>C (/24)</td></tr><tr><td>224–239</td><td>D (multicast)</td></tr><tr><td>240–255</td><td>E (experimental)</td></tr></table>'};
+}},
+{id:'hosts',name:'Usable hosts',topic:'v4',day:'8',obj:{v11:'1.6',v20:'1.3'},gen(){
+  const p=chance(.7)?ri(20,30):ri(8,19), h=hostsOf(p);
+  return {prompt:'How many usable host addresses in a <b>/'+p+'</b> network?',fields:one('a','Usable hosts','num',''),sol:{a:String(h)},
+    grade:a=>gradeEq({a:String(h)},a,nNum),
+    expl:'<p>Host bits = 32 − '+p+' = <b>'+(32-p)+'</b>.</p><p>2<sup>'+(32-p)+'</sup> − 2 = '+Math.pow(2,32-p).toLocaleString()+' − 2 = <b>'+h.toLocaleString()+'</b>. The 2 you subtract are the network and broadcast addresses.</p>'};
+}},
+{id:'mask',name:'Prefix ↔ mask',topic:'v4',day:'13',obj:{v11:'1.6',v20:'1.3'},gen(){
+  const p=ri(8,30), m=n2ip(pmask(p));
+  if(chance(.5)) return {prompt:'Write <b>/'+p+'</b> as a dotted-decimal subnet mask.',fields:one('a','Subnet mask','ip','255.255.…'),sol:{a:m},grade:a=>gradeEq({a:m},a,nIP),expl:maskExpl(p)};
+  return {prompt:'What prefix length is this mask?<span class="big">'+m+'</span>',fields:one('a','Prefix','num','/…'),sol:{a:'/'+p},grade:a=>gradeEq({a:String(p)},a,nNum),
+    expl:'<p>Count the 1 bits: each 255 is 8, then the partial octet.</p>'+maskExpl(p)};
+}},
+{id:'net',name:'Network address',topic:'v4',day:'13',obj:{v11:'1.6',v20:'1.3'},gen(){
+  const p=randPrefix(), ip=randHost(p), n=n2ip(netOf(ip,p));
+  return {prompt:'What\'s the network address?<span class="big">'+n2ip(ip)+'/'+p+'</span>',fields:one('a','Network address','ip',''),sol:{a:n},grade:a=>gradeEq({a:n},a,nIP),expl:netExpl(ip,p)};
+}},
+{id:'bcast',name:'Broadcast address',topic:'v4',day:'13',obj:{v11:'1.6',v20:'1.3'},gen(){
+  const p=randPrefix(), ip=randHost(p), b=n2ip(bcOf(ip,p));
+  return {prompt:'What\'s the broadcast address?<span class="big">'+n2ip(ip)+'/'+p+'</span>',fields:one('a','Broadcast address','ip',''),sol:{a:b},grade:a=>gradeEq({a:b},a,nIP),expl:netExpl(ip,p)};
+}},
+{id:'range',name:'First & last usable',topic:'v4',day:'13',obj:{v11:'1.6',v20:'1.3'},gen(){
+  const p=Math.min(30,randPrefix()), ip=randHost(p), sol={f:n2ip(netOf(ip,p)+1),l:n2ip(bcOf(ip,p)-1)};
+  return {prompt:'What are the first and last usable addresses?<span class="big">'+n2ip(ip)+'/'+p+'</span>',
+    fields:[{k:'f',label:'First usable',kb:'ip'},{k:'l',label:'Last usable',kb:'ip'}],sol,grade:ipFields(sol),
+    expl:netExpl(ip,p)+'<p>First usable = network + 1. Last usable = broadcast − 1.</p>'};
+}},
+{id:'same',name:'Same subnet?',topic:'v4',day:'14',obj:{v11:'1.6',v20:'1.3'},gen(){
+  const p=randPrefix(), a=randHost(p), n=netOf(a,p), size=Math.pow(2,32-p);
+  let b, same=chance(.5);
+  if(same){ b=n+ri(1,Math.max(1,size-2)) }
+  else{ const dir=chance(.5)?1:-1; b=((n+dir*size*ri(1,2))>>>0)+ri(1,Math.max(1,size-2)); if(netOf(b,p)===n) same=true }
+  b=b>>>0;
+  return {prompt:'With a <b>/'+p+'</b> mask, are these two hosts in the same subnet?<span class="big">'+n2ip(a)+'<br>'+n2ip(b)+'</span>',
+    choices:[{v:'y',label:'Same subnet'},{v:'n',label:'Different subnets'}],sol:same?'y':'n',grade:x=>({ok:x===(same?'y':'n')}),
+    expl:'<p>Find the network address of each:</p><p><code>'+n2ip(a)+'</code> → <code>'+n2ip(n)+'</code><br><code>'+n2ip(b)+'</code> → <code>'+n2ip(netOf(b,p))+'</code></p><p>'+(same?'Same network, so same subnet.':'Different networks, so a router is needed between them.')+'</p>'+netExpl(a,p,'short')};
+}},
+{id:'full',name:'Full subnet breakdown',topic:'v4',day:'14',obj:{v11:'1.6',v20:'1.3'},gen(){
+  const p=Math.min(30,randPrefix()), ip=randHost(p), n=netOf(ip,p), b=bcOf(ip,p);
+  const sol={n:n2ip(n),b:n2ip(b),f:n2ip(n+1),l:n2ip(b-1),hosts:String(hostsOf(p))};
+  return {prompt:'Break this down completely:<span class="big">'+n2ip(ip)+'/'+p+'</span>',
+    fields:[{k:'n',label:'Network',kb:'ip'},{k:'b',label:'Broadcast',kb:'ip'},{k:'f',label:'First usable',kb:'ip'},{k:'l',label:'Last usable',kb:'ip'},{k:'hosts',label:'Usable hosts',kb:'num'}],
+    sol,grade:ipFields(sol),expl:netExpl(ip,p)};
+}},
+{id:'split',name:'Counting subnets',topic:'v4',day:'14',obj:{v11:'1.6',v20:'1.3'},gen(){
+  const base=pick([8,16,16,24,24,20,22]), net=n2ip(netOf(randIP(),base));
+  if(chance(.5)){
+    const q=ri(base+1,Math.min(30,base+10)), ans=Math.pow(2,q-base);
+    return {prompt:'You split <b>'+net+'/'+base+'</b> into <b>/'+q+'</b> subnets. How many subnets do you get?',fields:one('a','Subnets','num',''),sol:{a:String(ans)},
+      grade:a=>gradeEq({a:String(ans)},a,nNum),expl:'<p>Borrowed bits = '+q+' − '+base+' = <b>'+(q-base)+'</b>.</p><p>2<sup>'+(q-base)+'</sup> = <b>'+ans.toLocaleString()+'</b> subnets, each with '+hostsOf(q).toLocaleString()+' usable hosts.</p>'};
+  }
+  let need, bits; do{ need=ri(3,base<=16?2000:60); bits=Math.ceil(Math.log2(need)) }while(base+bits>30);
+  const ans=base+bits;
+  return {prompt:'You need at least <b>'+need+'</b> subnets from <b>'+net+'/'+base+'</b>. What prefix length should they use?',fields:one('a','Prefix','num','/…'),sol:{a:'/'+ans},
+    grade:a=>gradeEq({a:String(ans)},a,nNum),
+    expl:'<p>Find the smallest power of 2 that reaches '+need+': 2<sup>'+(bits-1)+'</sup> = '+Math.pow(2,bits-1)+' is too few, 2<sup>'+bits+'</sup> = '+Math.pow(2,bits)+' is enough. Borrow <b>'+bits+'</b> bits.</p><p>/'+base+' + '+bits+' = <b>/'+ans+'</b> ('+n2ip(pmask(ans))+'), with '+hostsOf(ans).toLocaleString()+' hosts per subnet.</p>'};
+}},
+{id:'fit',name:'Fit the hosts',topic:'v4',day:'15',obj:{v11:'1.6',v20:'1.3'},gen(){
+  const h=chance(.7)?ri(2,500):ri(501,16000), bits=Math.ceil(Math.log2(h+2)), ans=32-bits;
+  return {prompt:'A LAN needs <b>'+h.toLocaleString()+'</b> hosts. What\'s the smallest subnet (longest prefix) that fits?',fields:one('a','Prefix','num','/…'),sol:{a:'/'+ans},
+    grade:a=>gradeEq({a:String(ans)},a,nNum),
+    expl:'<p>You need '+h+' hosts + 2 (network and broadcast) = '+(h+2)+' addresses.</p><p>2<sup>'+(bits-1)+'</sup> = '+Math.pow(2,bits-1)+' is too small, 2<sup>'+bits+'</sup> = '+Math.pow(2,bits)+' fits, so you need <b>'+bits+'</b> host bits.</p><p>32 − '+bits+' = <b>/'+ans+'</b>, which gives '+hostsOf(ans).toLocaleString()+' usable.</p>'};
+}},
+{id:'vlsm',name:'VLSM plan',topic:'v4',day:'15',obj:{v11:'1.6',v20:'1.3'},gen(){
+  let bp, blockNet;
+  const k=Math.random();
+  if(k<.6){ bp=24; blockNet=ip2n('192.168.'+ri(0,255)+'.0') } else if(k<.85){ bp=23; blockNet=ip2n('10.'+ri(0,255)+'.'+ri(0,127)*2+'.0') } else { bp=22; blockNet=ip2n('172.'+ri(16,31)+'.'+ri(0,63)*4+'.0') }
+  const S=Math.pow(2,32-bp); let items;
+  for(let t=0;t<200;t++){
+    const n=ri(3,4), links=ri(0,2); items=[];
+    for(let i=0;i<n;i++){ const pp=ri(bp+1,28); const hi=hostsOf(pp), lo=pp===bp+1?Math.floor(hi/2):hostsOf(pp+1)+1; items.push({name:'LAN '+'ABCD'[i],hosts:ri(Math.max(3,lo),hi),p:pp}) }
+    for(let i=0;i<links;i++) items.push({name:'Link '+(i+1),hosts:2,p:30,link:1});
+    items.forEach(x=>x.p=32-Math.ceil(Math.log2(x.hosts+2)));
+    if(items.reduce((s,x)=>s+Math.pow(2,32-x.p),0)<=S) break;
+  }
+  const order=items.map((x,i)=>({...x,i})).sort((a,b)=>a.p-b.p||a.i-b.i);
+  let cur=blockNet; order.forEach(x=>{ x.net=cur; cur=(cur+Math.pow(2,32-x.p))>>>0 });
+  const sol={}; items.forEach((x,i)=>{ const o=order.find(y=>y.i===i); sol['s'+i]=n2ip(o.net)+'/'+o.p });
+  /* equal-size subnets can swap places, so grade by size group rather than exact slot */
+  const grade=ans=>{
+    const marks={}; let ok=true; const used={};
+    items.forEach((x,i)=>{ const v=parseIpP(ans['s'+i]||''); let good=false;
+      if(v&&v.p===x.p&&netOf(v.ip,v.p)===v.ip){ const expect=order.filter(o=>o.p===x.p).map(o=>o.net);
+        if(expect.includes(v.ip)&&!used[v.ip]){ good=true; used[v.ip]=1 } }
+      marks['s'+i]=good; if(!good) ok=false });
+    return {ok,marks};
+  };
+  return {prompt:'Subnet <b>'+n2ip(blockNet)+'/'+bp+'</b> with VLSM, largest first, starting at the beginning of the block:<br>'+'<span style="display:block;margin-top:8px">'+items.map(x=>'<span style="display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:6px 0;font-size:16px"><span>'+esc(x.name)+(x.link?' <span class="tiny">point-to-point</span>':'')+'</span><b class="num">'+x.hosts+' hosts</b></span>').join('')+'</span>',
+    fields:items.map((x,i)=>({k:'s'+i,label:x.name+', '+x.hosts+' hosts: network/prefix',kb:'ipp',ph:'e.g. 192.168.1.0/26'})),sol,grade,
+    expl:'<p>Sort by size (biggest first), give each the smallest prefix that fits its hosts + 2, and hand out blocks in order from the start of '+n2ip(blockNet)+'.</p><table><tr><th>Subnet</th><th>Needs</th><th>Gets</th><th>Range</th></tr>'+
+      order.map(o=>'<tr><td style="font-family:var(--sans)">'+esc(o.name)+'</td><td>'+o.hosts+'+2</td><td>/'+o.p+' ('+Math.pow(2,32-o.p)+')</td><td>'+n2ip(o.net)+' – '+n2ip((o.net+Math.pow(2,32-o.p)-1)>>>0)+'</td></tr>').join('')+'</table>'};
+}},
+{id:'priv',name:'Private or public?',topic:'v4',day:'44',obj:{v11:'1.7',v20:'1.3'},gen(){
+  let ip, prv;
+  if(chance(.5)){ prv=true; ip=pick(['10.'+ri(0,255)+'.'+ri(0,255)+'.'+ri(1,254),'172.'+ri(16,31)+'.'+ri(0,255)+'.'+ri(1,254),'192.168.'+ri(0,255)+'.'+ri(1,254)]) }
+  else{ prv=false; ip=pick(['172.'+pick([ri(1,15),ri(32,254)])+'.'+ri(0,255)+'.'+ri(1,254),'192.'+pick([ri(1,167),ri(169,254)])+'.'+ri(0,255)+'.'+ri(1,254),pick([11,9,8,203,64,45])+'.'+ri(0,255)+'.'+ri(0,255)+'.'+ri(1,254)]) }
+  return {prompt:'Is this a private (RFC 1918) address or a public one?<span class="big">'+ip+'</span>',choices:[{v:'p',label:'Private'},{v:'u',label:'Public'}],sol:prv?'p':'u',grade:x=>({ok:x===(prv?'p':'u')}),
+    expl:'<p>The three private ranges:</p><table><tr><td>10.0.0.0/8</td><td>10.0.0.0 – 10.255.255.255</td></tr><tr><td>172.16.0.0/12</td><td>172.16.0.0 – 172.31.255.255</td></tr><tr><td>192.168.0.0/16</td><td>192.168.0.0 – 192.168.255.255</td></tr></table><p>'+ip+' is <b>'+(prv?'inside':'outside')+'</b> them. Watch the 172 range: only 172.<b>16</b> through 172.<b>31</b> are private.</p>'};
+}},
+{id:'hex',name:'Hex conversions',topic:'bh',day:'31',obj:{v11:'1.8',v20:'1.4'},gen(){
+  const kind=pick(['d2h','h2d','h2b','b2h']);
+  if(kind==='d2h'||kind==='h2d'){ const v=ri(0,255), h=v.toString(16).padStart(2,'0');
+    const ex='<p>'+h[0]+' × 16 + '+h[1]+' → '+parseInt(h[0],16)+' × 16 + '+parseInt(h[1],16)+' = <b>'+v+'</b>. (a=10, b=11, c=12, d=13, e=14, f=15)</p>';
+    if(kind==='d2h') return {prompt:'Convert to hexadecimal:<span class="big">'+v+'</span>',fields:one('a','Hex','hex','2 digits'),sol:{a:h},grade:a=>gradeEq({a:h},a,x=>String(x).trim().toLowerCase().replace(/^0x/,'').padStart(2,'0')),
+      expl:'<p>'+v+' ÷ 16 = '+Math.floor(v/16)+' remainder '+(v%16)+' → digits <b>'+h[0]+'</b> and <b>'+h[1]+'</b>.</p>'+ex};
+    return {prompt:'Convert to decimal:<span class="big">0x'+h.toUpperCase()+'</span>',fields:one('a','Decimal','num',''),sol:{a:String(v)},grade:a=>gradeEq({a:String(v)},a,nNum),expl:ex};
+  }
+  const v=ri(0,15), h=v.toString(16), b=v.toString(2).padStart(4,'0');
+  const ex='<p class="bits">8 4 2 1</p><p>'+h.toUpperCase()+' = '+v+' = '+([8,4,2,1].filter(p=>v&p).join(' + ')||'0')+' → <b class="bits">'+b+'</b></p>';
+  if(kind==='h2b') return {prompt:'Hex digit to 4-bit binary:<span class="big">'+h.toUpperCase()+'</span>',fields:one('a','Binary','bin','4 bits'),sol:{a:b},grade:a=>gradeEq({a:b},a,x=>String(x).replace(/\s/g,'').padStart(4,'0')),expl:ex};
+  return {prompt:'4-bit binary to a hex digit:<span class="big">'+b+'</span>',fields:one('a','Hex digit','hex',''),sol:{a:h},grade:a=>gradeEq({a:h},a,x=>String(x).trim().toLowerCase()),expl:ex};
+}},
+{id:'v6short',name:'Shorten IPv6',topic:'v6',day:'31',obj:{v11:'1.8',v20:'1.4'},gen(){
+  const g=randV6(), c=v6canon(g);
+  return {prompt:'Write this address as short as possible:<span class="big">'+v6full(g)+'</span>',fields:one('a','Shortened','v6',''),sol:{a:c},
+    grade:a=>{ const x=v6parse(a.a||''); if(!sameG(x,g)) return {ok:false,marks:{a:false},notes:x?['That\'s a different address. Check each group against the original.']:['That isn\'t a valid IPv6 address.']};
+      const r=v6checkShort(a.a,g); return {ok:r.ok,marks:{a:r.ok},notes:r.ok?r.notes:[r.why]} },
+    expl:'<p>1. Drop leading zeros in each group: <code>'+g.map(x=>x.toString(16)).join(':')+'</code></p><p>2. Replace the longest run of all-zero groups with <code>::</code> (only once per address).</p><p>Answer <code>'+c+'</code></p>'};
+}},
+{id:'v6exp',name:'Expand IPv6',topic:'v6',day:'31',obj:{v11:'1.8',v20:'1.4'},gen(){
+  let g; do{ g=randV6() }while(!v6canon(g).includes('::'));
+  const c=v6canon(g), d=c.split('::'), L=d[0]?d[0].split(':').length:0, R=d[1]?d[1].split(':').length:0, miss=8-L-R;
+  const ex='<p>Count the groups you can see: '+L+' before the <code>::</code> and '+R+' after = '+(L+R)+'. An address has 8, so <code>::</code> stands for <b>'+miss+'</b> zero group'+(miss>1?'s':'')+'.</p><p>Then pad every group to 4 digits: <code>'+v6full(g)+'</code></p>';
+  if(chance(.4)) return {prompt:'How many all-zero groups does the <code>::</code> stand for?<span class="big">'+c+'</span>',fields:one('a','Zero groups','num',''),sol:{a:String(miss)},grade:a=>gradeEq({a:String(miss)},a,nNum),expl:ex};
+  return {prompt:'Write out the full address (all 8 groups, 4 digits each):<span class="big">'+c+'</span>',fields:one('a','Full address','v6',''),sol:{a:v6full(g)},
+    grade:a=>{ const s=String(a.a||'').trim().toLowerCase(); const x=v6parse(s); const full=/^([0-9a-f]{4}:){7}[0-9a-f]{4}$/.test(s);
+      if(sameG(x,g)&&full) return {ok:true,marks:{a:true}};
+      return {ok:false,marks:{a:false},notes:[sameG(x,g)?'Right address, but it isn\'t fully written out. Every group needs 4 digits and no ::.':'Not the same address. Count the zero groups again.']} },
+    expl:ex};
+}},
+{id:'v6pre',name:'IPv6 network prefix',topic:'v6',day:'31',obj:{v11:'1.8',v20:'1.4'},gen(){
+  const g=randV6(); g[3]=g[3]||ri(1,0xffff); g[4]=g[4]||ri(1,0xffff);
+  const p=pick([64,64,64,48,48,56,56,32,52,60]);
+  const ng=g.map((x,i)=>{ const lo=i*16; if(lo+16<=p) return x; if(lo>=p) return 0; const keep=p-lo; return x&((0xffff<<(16-keep))&0xffff) });
+  const ans=v6canon(ng)+'/'+p;
+  const whole=Math.floor(p/16), digits=p/4;
+  return {prompt:'What\'s the network prefix of this address?<span class="big">'+v6canon(g)+'/'+p+'</span>',fields:one('a','Prefix','v6','e.g. 2001:db8:1::/48'),sol:{a:ans},
+    grade:a=>{ const s=String(a.a||''), m=s.match(/\/(\d+)\s*$/); if(m&&+m[1]!==p) return {ok:false,marks:{a:false},notes:['The prefix length stays /'+p+'.']};
+      const x=v6parse(s); return {ok:sameG(x,ng),marks:{a:sameG(x,ng)}} },
+    expl:'<p>Each hex digit is 4 bits, so /'+p+' keeps the first <b>'+digits+'</b> hex digits'+(p%16===0?' ('+whole+' full group'+(whole>1?'s':'')+')':' ('+whole+' full groups plus '+(digits%4)+' digit'+(digits%4>1?'s':'')+' of the next)')+'. Everything after becomes 0.</p><p>Full address: <code>'+v6full(g)+'</code></p><p>Prefix: <code>'+v6full(ng)+'</code> → <code>'+ans+'</code></p>'};
+}},
+{id:'eui',name:'EUI-64',topic:'v6',day:'32',obj:{v11:'1.8',v20:'1.4'},gen(){
+  const mac=Array.from({length:6},()=>ri(0,255)); if(chance(.5)) mac[0]&=~2; else mac[0]|=2;
+  const hx=b=>b.toString(16).padStart(2,'0');
+  const macCisco=[0,2,4].map(i=>hx(mac[i])+hx(mac[i+1])).join('.').toUpperCase();
+  const f=mac[0]^2, idBytes=[f,mac[1],mac[2],0xff,0xfe,mac[3],mac[4],mac[5]];
+  const id=[0,2,4,6].map(i=>hx(idBytes[i])+hx(idBytes[i+1])).join(':');
+  const ex='<p>1. Split the MAC in half: <code>'+hx(mac[0])+hx(mac[1])+hx(mac[2])+'</code> | <code>'+hx(mac[3])+hx(mac[4])+hx(mac[5])+'</code></p>'+
+    '<p>2. Put <code>fffe</code> in the middle: <code>'+hx(mac[0])+hx(mac[1])+':'+hx(mac[2])+'ff:fe'+hx(mac[3])+':'+hx(mac[4])+hx(mac[5])+'</code></p>'+
+    '<p>3. Flip the 7th bit of the first byte: '+hx(mac[0])+' = <span class="bits">'+bin8(mac[0]).slice(0,6)+'<b>'+bin8(mac[0])[6]+'</b>'+bin8(mac[0])[7]+'</span> → <span class="bits">'+bin8(f).slice(0,6)+'<b>'+bin8(f)[6]+'</b>'+bin8(f)[7]+'</span> = '+hx(f)+'</p>'+
+    '<p>Interface ID: <code>'+id+'</code></p>';
+  if(chance(.35)){ const pre=[0x2001,0x0db8,ri(0,0xffff),ri(1,0xffff)], full=[...pre,...[0,2,4,6].map(i=>idBytes[i]*256+idBytes[i+1])];
+    const ans=v6canon(full);
+    return {prompt:'An interface on <code>'+v6canon([...pre,0,0,0,0])+'/64</code> uses EUI-64 with this MAC. What\'s its full IPv6 address?<span class="big">'+macCisco+'</span>',
+      fields:one('a','IPv6 address','v6',''),sol:{a:ans},grade:a=>{ const x=v6parse(a.a||''); return {ok:sameG(x,full),marks:{a:sameG(x,full)}} },
+      expl:ex+'<p>Put it after the /64 prefix: <code>'+ans+'</code></p>'};
+  }
+  return {prompt:'What\'s the EUI-64 interface ID for this MAC address?<span class="big">'+macCisco+'</span>',fields:one('a','Interface ID','v6','xxxx:xxff:fexx:xxxx'),sol:{a:id},
+    grade:a=>gradeEq({a:id},a,x=>String(x).toLowerCase().replace(/[^0-9a-f]/g,'')),expl:ex};
+}},
+{id:'v6type',name:'IPv6 address types',topic:'v6',day:'32',obj:{v11:'1.9',v20:'1.4'},gen(){
+  const hx=()=>ri(0,0xffff).toString(16);
+  const t=pick(['g','g','u','l','l','m','m','lo','un']);
+  const addr={g:()=>v6canon(pick([[0x2001,0xdb8,ri(0,0xffff),ri(0,0xffff),0,0,0,ri(1,0xffff)],[ri(0x2000,0x3fff),ri(0,0xffff),ri(0,0xffff),0,ri(1,0xffff),ri(1,0xffff),ri(1,0xffff),ri(1,0xffff)]])),
+    u:()=>'fd'+ri(0,255).toString(16).padStart(2,'0')+':'+hx()+':'+hx()+':'+ri(1,0xffff).toString(16)+'::'+ri(1,0xffff).toString(16),
+    l:()=>'fe80::'+hx()+':'+ri(0,255).toString(16)+'ff:fe'+ri(0,255).toString(16)+':'+ri(1,0xffff).toString(16),
+    m:()=>pick(['ff02::1','ff02::2','ff02::5','ff02::6','ff02::a','ff05::'+ri(1,0xfff).toString(16),'ff02::1:ff'+ri(0,255).toString(16).padStart(2,'0')+':'+ri(1,0xffff).toString(16)]),
+    lo:()=>'::1',un:()=>'::'}[t]();
+  const names={g:'Global unicast',u:'Unique local',l:'Link-local',m:'Multicast',lo:'Loopback',un:'Unspecified'};
+  return {prompt:'What type of IPv6 address is this?<span class="big">'+addr+'</span>',choices:Object.entries(names).map(([v,label])=>({v,label})),sol:t,grade:x=>({ok:x===t}),
+    expl:'<table><tr><th>Starts with</th><th>Type</th></tr><tr><td>2000::/3 (2 or 3)</td><td>Global unicast</td></tr><tr><td>fc00::/7 (fc or fd)</td><td>Unique local</td></tr><tr><td>fe80::/10</td><td>Link-local</td></tr><tr><td>ff00::/8 (ff)</td><td>Multicast</td></tr><tr><td>::1</td><td>Loopback</td></tr><tr><td>::</td><td>Unspecified</td></tr></table><p>This one is <b>'+names[t]+'</b>.'+(t==='m'&&addr.includes(':ff')&&addr.startsWith('ff02::1:ff')?' It\'s a solicited-node address (ff02::1:ff + last 24 bits).':'')+'</p>'};
+}}
+];
+const DBY=Object.fromEntries(DRILLS.map(d=>[d.id,d]));
+
+/* =====================================================================
+   state + storage
+   ===================================================================== */
+const K='ccna.';
+function load(k,d){ try{ const v=localStorage.getItem(K+k); return v==null?d:JSON.parse(v) }catch(e){ return d } }
+function store(k,v){ try{ localStorage.setItem(K+k,JSON.stringify(v)) }catch(e){ toast('This phone is out of storage space.') } }
+let DEV=load('dev',null); if(!DEV){ DEV=Math.random().toString(36).slice(2,6); store('dev',DEV) }
+/* attempts: [ts, device, drill, ok 1/0, ms] */
+let ATT=load('att',[]);
+/* course: done[id]={d:bool,at}, cur={v:index,at} */
+let DONE=load('done',{}), CURDAY=load('cur',{v:0,at:0});
+let MIST=load('mist',[]);
+let PREFS=Object.assign({version:{v:'unsure',at:0},exam:{v:'',at:0}},load('prefs',{}));
+let LOCAL=Object.assign({unlockAll:false},load('local',{}));
+let GH=load('gh',null), SYNCERR='';
+let CUR='home';
+function saveAll(){ store('att',ATT); store('done',DONE); store('cur',CURDAY); store('mist',MIST); store('prefs',PREFS); syncSoon() }
+const curIdx=()=>Math.max(0,Math.min(COURSE.length-1,CURDAY.v|0));
+const isUnlocked=d=>LOCAL.unlockAll||dayIdx(d.day)<=curIdx();
+const unlocked=()=>DRILLS.filter(isUnlocked);
+const verKey=()=>PREFS.version.v==='v20'?'v20':'v11';
+
+function drillStats(id){
+  const a=ATT.filter(x=>x[2]===id); const n=a.length, ok=a.reduce((s,x)=>s+x[3],0);
+  const last=a.slice(-20), acc=last.length?last.reduce((s,x)=>s+x[3],0)/last.length:null;
+  const t=last.filter(x=>x[3]).map(x=>x[4]).sort((x,y)=>x-y), med=t.length?t[Math.floor(t.length/2)]:null;
+  const level=!n?0:(acc<.6||n<5)?1:acc<.85?2:(n>=20&&acc>=.9)?4:3;
+  return {n,ok,acc,med,level,score:acc==null?0:acc*Math.min(1,n/20)};
+}
+const LEVELS=['Not started','Learning','Getting there','Solid','Mastered'];
+function streak(){
+  const days=new Set(ATT.map(x=>dayKey(x[0]))); let s=0; const d=new Date();
+  if(!days.has(dayKey(d))) d.setDate(d.getDate()-1);
+  while(days.has(dayKey(d))){ s++; d.setDate(d.getDate()-1) }
+  return s;
+}
+
+/* =====================================================================
+   ui bits
+   ===================================================================== */
+let toastTimer=null, toastUndo=null;
+function toast(msg,undo){ $('toast-msg').textContent=msg; toastUndo=undo||null; $('toast-btn').style.display=undo?'':'none';
+  $('toast').classList.add('on'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>{$('toast').classList.remove('on');toastUndo=null},undo?7000:2600) }
+$('toast-btn').onclick=()=>{ const u=toastUndo; toastUndo=null; $('toast').classList.remove('on'); if(u) u() };
+function openSheet(title,html,after){ $('sheet-title').textContent=title; $('sheet-body').innerHTML=html; $('sheet').classList.add('on'); document.body.style.overflow='hidden'; $('sheet').querySelector('.panel').scrollTop=0; if(after) after() }
+function closeSheet(){ $('sheet').classList.remove('on'); document.body.style.overflow='' }
+$('sheet-close').onclick=closeSheet; $('sheet').querySelector('.scrim').onclick=closeSheet;
+const ytLink=c=>'https://www.youtube.com/results?search_query='+encodeURIComponent('Jeremy\'s IT Lab CCNA Day '+c.id.replace(/[abc]$/,'')+' '+c.title.replace(/,? Part \d.*$/,''));
+
+/* =====================================================================
+   home
+   ===================================================================== */
+function renderHome(){
+  const c=COURSE[curIdx()], today=ATT.filter(x=>dayKey(x[0])===todayKey()), unl=unlocked();
+  const v=PREFS.version.v, doms=DOMAINS[verKey()];
+  const dScore=DRILLS.map(d=>drillStats(d.id).score), d1=dScore.reduce((s,x)=>s+x,0)/DRILLS.length;
+  const weak=unl.map(d=>({d,s:drillStats(d.id)})).filter(x=>x.s.n>=5).sort((a,b)=>a.s.acc-b.s.acc).slice(0,3).filter(x=>x.s.acc<.9);
+  let examLine='';
+  if(PREFS.exam.v){ const days=Math.ceil((new Date(PREFS.exam.v+'T08:00')-Date.now())/864e5); examLine=days>=0?'<span class="pill blue">Exam in '+days+' day'+(days===1?'':'s')+'</span>':'' }
+  $('home').innerHTML=
+    '<div class="stats3"><div class="tile"><div class="v">'+streak()+'</div><div class="k">day streak</div></div>'+
+      '<div class="tile"><div class="v">'+today.length+'</div><div class="k">answered today</div></div>'+
+      '<div class="tile"><div class="v">'+(today.length?pct(today.reduce((s,x)=>s+x[3],0)/today.length):'—')+'</div><div class="k">today\'s accuracy</div></div></div>'+
+    (unl.length?'<div class="hero"><button id="go-quick"><b>Quick 10</b><span>A mixed round for a break</span></button><button id="go-lunch"><b>Lunch</b><span>25 minutes, deeper mix</span></button></div>':
+      '<div class="note">Drills start at Day 7 (IPv4 addressing). Mark the days you\'ve watched in Course, or turn on "Unlock everything" in Settings.</div>')+
+    '<div class="card"><h3>Where you are in the course</h3><div class="day"><div class="dn">'+c.id+'</div><div style="flex:1;min-width:0"><div style="font-weight:650">'+esc(c.title)+'</div>'+
+      '<div class="tiny">'+Object.values(DONE).filter(x=>x.d).length+' of '+COURSE.length+' days done</div></div></div>'+
+      '<div class="row" style="margin-top:12px"><button class="btn small go" id="c-done">Done, next day</button><a class="btn small" href="'+ytLink(c)+'" target="_blank" rel="noopener">Find the video</a></div></div>'+
+    (weak.length?'<div class="card"><h3>Weak spots</h3>'+weak.map(x=>'<button class="li" data-drill="'+x.d.id+'"><div class="main"><div class="nm"><span class="lvl l'+x.s.level+'"></span>'+esc(x.d.name)+'</div></div><div class="side">'+pct(x.s.acc)+'</div></button>').join('')+'</div>':'')+
+    '<div class="card"><h3>Exam readiness '+(v==='unsure'?'(v1.1 topics)':v==='v20'?'(v2.0 topics)':'(v1.1 topics)')+' '+examLine+'</h3>'+
+      doms.map(([name,w],i)=>'<div class="dom'+(i?' off':'')+'"><div class="top"><span>'+name+' <span class="tiny">'+w+'%</span></span><span class="num">'+(i?'':pct(d1))+'</span></div>'+
+        (i?'<div class="tiny">Coming in a later update</div>':'<div class="bar"><i style="width:'+Math.round(d1*100)+'%"></i></div><div class="tiny" style="margin-top:4px">From the subnetting, IPv6 and binary drills</div>')+'</div>').join('')+
+      (v==='unsure'?'<p class="tiny" style="margin:10px 0 0">v1.1 is the exam until Feb 2, 2027. v2.0 starts Feb 3. Pick yours in Settings when you decide.</p>':'')+'</div>';
+  if($('go-quick')) $('go-quick').onclick=()=>startSession('quick');
+  if($('go-lunch')) $('go-lunch').onclick=()=>startSession('lunch');
+  $('c-done').onclick=()=>{ markDay(c.id,true); const next=Math.min(COURSE.length-1,curIdx()+1); setCur(next);
+    const newly=DRILLS.filter(d=>d.day===COURSE[next].id);
+    renderHome(); toast(newly.length?'Day '+COURSE[next].id+' unlocked '+newly.length+' drill'+(newly.length>1?'s':''):'On to Day '+COURSE[next].id) };
+  document.querySelectorAll('#home [data-drill]').forEach(b=>b.onclick=()=>startSession('free',b.dataset.drill));
+}
+function markDay(id,d){ DONE[id]={d,at:Date.now()}; saveAll() }
+function setCur(i){ CURDAY={v:i,at:Date.now()}; saveAll() }
+
+/* =====================================================================
+   practice list
+   ===================================================================== */
+function renderPractice(){
+  const unl=unlocked();
+  let h=unl.length>1?'<button class="btn wide go" id="p-mix" style="margin:0 0 6px">Mixed practice, no timer</button>':'';
+  for(const [t,label] of TOPICS){
+    const list=DRILLS.filter(d=>d.topic===t);
+    h+='<h2>'+label+'</h2><div class="card" style="padding:2px 14px">'+list.map(d=>{ const s=drillStats(d.id), open=isUnlocked(d);
+      return '<button class="li'+(open?'':' locked')+'" data-drill="'+d.id+'"><div class="main"><div class="nm"><span class="lvl l'+s.level+'"></span>'+esc(d.name)+'</div>'+
+        '<div class="sub">'+(open?LEVELS[s.level]+(s.n?', '+s.n+' answered':''):'Unlocks at Day '+d.day)+'</div></div><div class="side">'+(s.n?pct(s.acc)+'<br>'+secs(s.med):'')+'</div></button>' }).join('')+'</div>';
+  }
+  h+='<p class="tiny">More topics (ACLs, routing tables, STP and OSPF elections, flashcards, the CLI simulator) arrive in later updates.</p>';
+  $('practice').innerHTML=h;
+  if($('p-mix')) $('p-mix').onclick=()=>startSession('free');
+  document.querySelectorAll('#practice [data-drill]').forEach(b=>b.onclick=()=>{ const d=DBY[b.dataset.drill];
+    if(isUnlocked(d)) return startSession('free',d.id);
+    openSheet(d.name,'<p class="muted">This one lines up with Day '+d.day+' ('+esc(COURSE[dayIdx(d.day)].title)+'), and you\'re on Day '+COURSE[curIdx()].id+'.</p><button class="btn wide go" id="l-go">Practice it anyway</button>',
+      ()=>{ $('l-go').onclick=()=>{ closeSheet(); startSession('free',d.id) } }) });
+}
+
+/* =====================================================================
+   course list
+   ===================================================================== */
+function renderCourse(){
+  const ci=curIdx();
+  $('course').innerHTML='<p class="muted">Day order follows Jeremy\'s IT Lab. Tap a day to set it as where you are or mark it done. Drills unlock as you go.</p>'+
+    '<div class="card" style="padding:4px 10px">'+COURSE.map(c=>{ const n=DRILLS.filter(d=>d.day===c.id).length;
+      return '<button class="cday'+(DONE[c.id]&&DONE[c.id].d?' done':'')+(c.i===ci?' cur':'')+'" data-day="'+c.i+'"><span class="n">'+c.id+'</span><span class="t">'+esc(c.title)+
+        (c.off?' <span class="pill">not on the exam</span>':'')+(n?' <span class="pill blue">'+n+' drill'+(n>1?'s':'')+'</span>':'')+'</span><span class="chk" data-chk="'+c.id+'"></span></button>' }).join('')+'</div>';
+  document.querySelectorAll('#course [data-chk]').forEach(x=>x.onclick=e=>{ e.stopPropagation(); const id=x.dataset.chk; markDay(id,!(DONE[id]&&DONE[id].d)); renderCourse() });
+  document.querySelectorAll('#course [data-day]').forEach(b=>b.onclick=()=>{ const c=COURSE[+b.dataset.day], n=DRILLS.filter(d=>d.day===c.id);
+    openSheet('Day '+c.id+': '+c.title,
+      (c.off?'<p class="note">Jeremy covers this for background, but it isn\'t on the exam blueprint.</p>':'')+
+      (n.length?'<p class="muted">Drills for this day: '+n.map(d=>esc(d.name)).join(', ')+'</p>':'<p class="muted">No drills for this day yet.</p>')+
+      '<button class="btn wide go" id="d-cur">I\'m on this day</button>'+
+      '<button class="btn wide" id="d-done">'+(DONE[c.id]&&DONE[c.id].d?'Mark not done':'Mark done')+'</button>'+
+      (n.length?'<button class="btn wide" id="d-prac">Practice this day\'s drills</button>':'')+
+      '<a class="btn wide" href="'+ytLink(c)+'" target="_blank" rel="noopener">Find the video</a>',
+      ()=>{
+        $('d-cur').onclick=()=>{ setCur(c.i); for(const x of COURSE) if(x.i<c.i&&!(DONE[x.id]&&DONE[x.id].d)) DONE[x.id]={d:true,at:Date.now()}; saveAll(); closeSheet(); renderCourse(); toast('You\'re on Day '+c.id) };
+        $('d-done').onclick=()=>{ markDay(c.id,!(DONE[c.id]&&DONE[c.id].d)); closeSheet(); renderCourse() };
+        if($('d-prac')) $('d-prac').onclick=()=>{ closeSheet(); startSession('free',null,n.map(d=>d.id)) };
+      });
+  });
+  const cur=document.querySelector('#course .cday.cur'); if(cur) setTimeout(()=>cur.scrollIntoView({block:'center'}),50);
+}
+
+/* =====================================================================
+   drill session
+   ===================================================================== */
+let S=null, clockIv=null;
+function startSession(mode,only,list){
+  const pool=list?list:only?[only]:unlocked().map(d=>d.id);
+  if(!pool.length){ toast('Nothing unlocked yet. Set your course day first.'); return }
+  S={mode,pool,start:Date.now(),ends:mode==='quick'?Date.now()+10*60e3:mode==='lunch'?Date.now()+25*60e3:null,n:0,ok:0,by:{},wrong:[],recent:[],q:null};
+  document.body.classList.add('drilling'); show('drill',true); nextQ();
+  clearInterval(clockIv); clockIv=setInterval(tick,1000); tick();
+}
+function tick(){ const el=$('clock'); if(!el||!S) return;
+  if(S.ends){ const left=Math.max(0,S.ends-Date.now()); el.textContent=Math.floor(left/60000)+':'+pad2(Math.floor(left%60000/1000)); el.classList.toggle('low',left<60e3) }
+  else el.textContent=Math.floor((Date.now()-S.start)/60000)+':'+pad2(Math.floor((Date.now()-S.start)%60000/1000)); }
+function pickDrill(){
+  if(S.pool.length===1) return S.pool[0];
+  const ci=curIdx(); const w=S.pool.map(id=>{ const s=drillStats(id), d=DBY[id];
+    let x=s.n<5?1.6:1+(1-s.acc)*2.5; const gap=ci-dayIdx(d.day); if(gap>=0&&gap<=3) x+=.8;
+    if(S.recent.slice(-2).every(r=>r===id)&&S.recent.length>=2) x=0; if(S.recent[S.recent.length-1]===id) x*=.35; return x });
+  let r=Math.random()*w.reduce((a,b)=>a+b,0); for(let i=0;i<w.length;i++){ r-=w[i]; if(r<=0) return S.pool[i] } return S.pool[0];
+}
+function nextQ(){
+  if(S.ends&&Date.now()>=S.ends) return finish();
+  const id=pickDrill(), d=DBY[id]; let q;
+  try{ q=d.gen() }catch(e){ console.error(e); q=DRILLS[0].gen() }
+  S.q={id,q,t0:Date.now(),done:false}; S.recent.push(id);
+  renderQ();
+}
+const KB={num:'inputmode="numeric" pattern="[0-9]*"',ip:'inputmode="decimal"',ipp:'inputmode="decimal"',bin:'inputmode="numeric" pattern="[0-9]*"',hex:'inputmode="text"',v6:'inputmode="text"'};
+const KEYS={ipp:['/'],v6:[':','::','a','b','c','d','e','f','/'],hex:['a','b','c','d','e','f']};
+function renderQ(){
+  const {q,id}=S.q, d=DBY[id];
+  $('drill').innerHTML=
+    '<div class="dhead"><button class="btn small" id="q-end">End</button><span class="clock" id="clock"></span><span class="score">'+S.ok+'/'+S.n+'</span></div>'+
+    (S.ends&&Date.now()>=S.ends?'<div class="timesup">Time\'s up. Finish this one.</div>':'')+
+    '<div class="qcard"><div class="qtopic">'+esc(d.name)+'</div><div class="qtext">'+q.prompt+'</div></div>'+
+    (q.choices?'<div class="choices">'+q.choices.map(c=>'<button data-c="'+esc(c.v)+'">'+esc(c.label)+'</button>').join('')+'</div>':
+      q.fields.map(f=>'<div class="field"><label for="f-'+f.k+'">'+esc(f.label)+'</label><input id="f-'+f.k+'" data-k="'+f.k+'" '+KB[f.kb]+' autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="'+'next'+'" placeholder="'+esc(f.ph||'')+'">'+
+        (KEYS[f.kb]?'<div class="keys">'+KEYS[f.kb].map(k=>'<button data-key="'+esc(k)+'" data-for="f-'+f.k+'" tabindex="-1">'+esc(k)+'</button>').join('')+'</div>':'')+'<div class="fix-ans" id="fa-'+f.k+'"></div></div>').join(''))+
+    '<div id="q-fb"></div>'+(q.choices?'':'<button class="btn wide go" id="q-check">Check</button>');
+  tick();
+  $('q-end').onclick=finish;
+  if(q.choices){ document.querySelectorAll('#drill [data-c]').forEach(b=>b.onclick=()=>{ if(!S.q.done) submit(b.dataset.c) }); return }
+  const ins=[...document.querySelectorAll('#drill .field input')];
+  ins.forEach((x,i)=>x.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); if(S.q.done) return nextQ(); if(i<ins.length-1&&!ins[i+1].value) ins[i+1].focus(); else submit() } }));
+  document.querySelectorAll('#drill [data-key]').forEach(b=>{ b.addEventListener('mousedown',e=>e.preventDefault()); b.addEventListener('touchstart',e=>e.preventDefault(),{passive:false});
+    const act=()=>{ const inp=$(b.dataset.for); const s=inp.selectionStart??inp.value.length, e=inp.selectionEnd??s; inp.value=inp.value.slice(0,s)+b.dataset.key+inp.value.slice(e); inp.focus(); const p=s+b.dataset.key.length; try{ inp.setSelectionRange(p,p) }catch(err){} };
+    b.addEventListener('touchend',e=>{ e.preventDefault(); act() }); b.addEventListener('click',act) });
+  $('q-check').onclick=()=>{ if(S.q.done) nextQ(); else submit() };
+  setTimeout(()=>ins[0]&&ins[0].focus(),30);
+}
+function plain(html){ const t=document.createElement('div'); t.innerHTML=html.replace(/<br\s*\/?>/g,' / ').replace(/<span class="big">/g,' '); return t.textContent.replace(/\s+/g,' ').trim() }
+function submit(choice){
+  const {q,id,t0}=S.q; let ans, r;
+  if(q.choices){ ans=choice; r=q.grade(choice) }
+  else{ ans={}; document.querySelectorAll('#drill .field input').forEach(x=>ans[x.dataset.k]=x.value);
+    if(Object.values(ans).every(v=>!v.trim())){ toast('Type an answer first'); return }
+    r=q.grade(ans) }
+  S.q.done=true; const ms=Date.now()-t0; buzz(r.ok?10:[30,40,30]);
+  S.n++; if(r.ok) S.ok++; S.by[id]=S.by[id]||{n:0,ok:0}; S.by[id].n++; if(r.ok) S.by[id].ok++;
+  ATT.push([Date.now(),DEV,id,r.ok?1:0,ms]);
+  const lab=(obj)=>q.fields.length>1?q.fields.map(f=>f.label.replace(/: network\/prefix$/,'')+': '+(obj[f.k]||'blank')).join(', '):(obj[q.fields[0].k]||'');
+  const solText=q.choices?q.choices.find(c=>c.v===q.sol).label:lab(q.sol);
+  const yours=q.choices?(q.choices.find(c=>c.v===choice)||{}).label:lab(ans);
+  if(!r.ok){ const m={id:Date.now()+DEV,t:Date.now(),d:id,q:plain(q.prompt),a:solText,y:yours}; MIST.push(m); MIST=MIST.slice(-80); S.wrong.push(m) }
+  saveAll();
+  if(q.choices){ document.querySelectorAll('#drill [data-c]').forEach(b=>{ if(b.dataset.c===q.sol) b.classList.add('good'); else if(b.dataset.c===choice) b.classList.add('wrong') }) }
+  else for(const f of q.fields){ const inp=$('f-'+f.k); const good=r.marks?r.marks[f.k]:r.ok; inp.classList.add(good?'good':'wrong'); inp.readOnly=true;
+    if(!good) $('fa-'+f.k).textContent='Answer: '+q.sol[f.k] }
+  $('q-fb').innerHTML='<div class="verdict '+(r.ok?'ok':'bad')+'">'+(r.ok?'Correct':'Not quite')+' <span class="tiny">'+secs(ms)+'</span></div>'+
+    (r.notes&&r.notes.length?'<div class="note">'+r.notes.join('<br>')+'</div>':'')+
+    '<div class="expl">'+q.expl+'</div>'+(q.choices?'<button class="btn wide go" id="q-next">Next</button>':'');
+  if($('q-check')){ $('q-check').textContent='Next'; $('q-check').focus() }
+  if($('q-next')) $('q-next').onclick=nextQ;
+  document.querySelector('.score').textContent=S.ok+'/'+S.n;
+  if(document.activeElement&&document.activeElement.tagName==='INPUT') document.activeElement.blur();
+  const scrollTo=r.ok?($('q-check')||$('q-next')):$('q-fb'); if(scrollTo) scrollTo.scrollIntoView({block:r.ok?'end':'start',behavior:'smooth'});
+}
+function finish(){
+  clearInterval(clockIv);
+  if(!S) return show('home');
+  const mins=Math.max(1,Math.round((Date.now()-S.start)/60000));
+  $('drill').innerHTML='<h1>Round done</h1>'+
+    (S.n?'<div class="stats3"><div class="tile"><div class="v">'+S.n+'</div><div class="k">answered</div></div><div class="tile"><div class="v">'+pct(S.ok/S.n)+'</div><div class="k">correct</div></div><div class="tile"><div class="v">'+mins+'m</div><div class="k">time</div></div></div>'+
+    '<div class="card" style="padding:2px 14px">'+Object.entries(S.by).map(([id,x])=>'<div class="li"><div class="main"><div class="nm">'+esc(DBY[id].name)+'</div></div><div class="side">'+x.ok+'/'+x.n+'</div></div>').join('')+'</div>'+
+    (S.wrong.length?'<h2>Missed</h2>'+S.wrong.map(m=>'<div class="card"><div class="tiny">'+esc(DBY[m.d].name)+'</div><div style="margin:4px 0">'+esc(m.q)+'</div><div class="tiny">You: <span class="bad">'+esc(m.y)+'</span></div><div class="tiny">Answer: <span class="ok">'+esc(m.a)+'</span></div></div>').join(''):''):
+    '<p class="muted">No questions answered this time.</p>')+
+    '<button class="btn wide go" id="r-again">Another round</button><button class="btn wide" id="r-home">Done</button>';
+  const mode=S.mode, pool=S.pool;
+  $('r-again').onclick=()=>startSession(mode,null,mode==='free'?pool:null);
+  $('r-home').onclick=()=>{ S=null; show('home') };
+  window.scrollTo(0,0);
+}
+
+/* =====================================================================
+   stats
+   ===================================================================== */
+function renderStats(){
+  const n=ATT.length, ok=ATT.reduce((s,x)=>s+x[3],0);
+  const days=[]; for(let i=13;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); days.push(dayKey(d)) }
+  const per=days.map(k=>ATT.filter(x=>dayKey(x[0])===k).length), mx=Math.max(1,...per);
+  $('stats').innerHTML=
+    '<div class="stats3"><div class="tile"><div class="v">'+n.toLocaleString()+'</div><div class="k">answered</div></div><div class="tile"><div class="v">'+(n?pct(ok/n):'—')+'</div><div class="k">all-time accuracy</div></div><div class="tile"><div class="v">'+streak()+'</div><div class="k">day streak</div></div></div>'+
+    '<div class="card"><h3>Last 14 days</h3><div class="bars">'+per.map((v,i)=>'<div class="bcol"><div class="bfill'+(v?'':' zero')+'" style="height:'+Math.max(2,v/mx*100)+'%"></div><span class="blab">'+(i%2?'':days[i].slice(8))+'</span></div>').join('')+'</div></div>'+
+    '<h2>By drill</h2><div class="card" style="padding:2px 14px">'+DRILLS.map(d=>{ const s=drillStats(d.id);
+      return '<button class="li" data-drill="'+d.id+'"><div class="main"><div class="nm"><span class="lvl l'+s.level+'"></span>'+esc(d.name)+'</div><div class="sub">'+LEVELS[s.level]+(s.n?', '+s.n+' answered, median '+secs(s.med):'')+'</div></div><div class="side">'+(s.n?pct(s.acc):'')+'</div></button>' }).join('')+'</div>'+
+    '<p class="tiny">Accuracy and time use your last 20 answers per drill. Mastered = 20+ answers at 90% or better.</p>'+
+    '<h2>Recent misses</h2>'+(MIST.length?MIST.slice(-15).reverse().map(m=>'<div class="card"><div class="tiny">'+esc(DBY[m.d]?DBY[m.d].name:m.d)+', '+ago(m.t)+'</div><div style="margin:4px 0">'+esc(m.q)+'</div><div class="tiny">You: <span class="bad">'+esc(m.y)+'</span></div><div class="tiny">Answer: <span class="ok">'+esc(m.a)+'</span></div>'+
+      (DBY[m.d]?'<button class="btn small" style="margin-top:8px" data-drill="'+m.d+'">Practice this drill</button>':'')+'</div>').join(''):'<div class="empty">Nothing missed yet.</div>');
+  document.querySelectorAll('#stats [data-drill]').forEach(b=>b.onclick=()=>startSession('free',b.dataset.drill));
+}
+
+/* =====================================================================
+   settings
+   ===================================================================== */
+function renderSettings(){
+  const v=PREFS.version.v;
+  $('settings').innerHTML=
+    '<div class="card"><h3>Exam version</h3><div class="seg">'+[['v11','v1.1'],['v20','v2.0'],['unsure','Not sure']].map(([k,l])=>'<button data-v="'+k+'" aria-pressed="'+(v===k)+'">'+l+'</button>').join('')+'</div>'+
+      '<p class="tiny" style="margin:8px 0 0">v1.1 runs until Feb 2, 2027. v2.0 starts Feb 3, 2027 and leans harder on configuring and troubleshooting.</p>'+
+      '<label class="f">Exam date (optional)</label><input type="date" id="x-date" value="'+esc(PREFS.exam.v)+'"></div>'+
+    '<div class="card"><label class="toggle"><span><b style="font-size:16px">Unlock everything</b><br><span class="tiny">Practice drills from days you haven\'t reached.</span></span><input type="checkbox" id="x-unl"'+(LOCAL.unlockAll?' checked':'')+'></label></div>'+
+    '<div class="card"><h3>Sync with GitHub</h3><p class="tiny" style="margin-top:-4px">Keeps your progress the same on your phone and computer. Connect each device with the same key.</p>'+
+      '<input id="g-repo" placeholder="owner/repo" autocomplete="off" autocapitalize="off" spellcheck="false" value="'+esc((GH&&GH.repo)||guessRepo())+'">'+
+      '<input id="g-token" type="password" style="margin-top:8px" autocomplete="off" placeholder="'+(hasGH()?'Key saved on this device':'GitHub key (github_pat_…)')+'">'+
+      '<div class="row" style="margin-top:8px"><button class="btn go" id="g-save">'+(hasGH()?'Sync now':'Connect')+'</button>'+(hasGH()?'<button class="btn" id="g-off">Disconnect</button>':'')+'</div>'+
+      '<p class="tiny" id="g-stat" style="margin:10px 0 0"></p></div>'+
+    '<div class="card"><h3>Backup</h3><div class="row"><button class="btn" id="bk-dl">Download backup</button><label class="btn" for="bk-f">Restore backup</label><input type="file" id="bk-f" accept=".json,application/json"></div></div>'+
+    '<div class="card"><h3>Start over</h3><p class="tiny" style="margin-top:-4px">Clears answers and misses on this device. Your course progress stays.</p><button class="btn danger" id="x-reset">Clear practice history</button></div>'+
+    '<p class="tiny">Course day order and titles follow Jeremy\'s IT Lab free CCNA course. All questions here are generated, not copied from the course or the exam.</p>';
+  document.querySelectorAll('#settings [data-v]').forEach(b=>b.onclick=()=>{ PREFS.version={v:b.dataset.v,at:Date.now()}; saveAll(); renderSettings() });
+  $('x-date').onchange=e=>{ PREFS.exam={v:e.target.value,at:Date.now()}; saveAll() };
+  $('x-unl').onchange=e=>{ LOCAL.unlockAll=e.target.checked; store('local',LOCAL) };
+  $('g-save').onclick=connectGH;
+  if($('g-off')) $('g-off').onclick=()=>{ GH=null; store('gh',null); SYNCERR=''; renderSettings() };
+  $('bk-dl').onclick=()=>{ const blob=new Blob([payload()],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='ccna-backup-'+todayKey()+'.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),4000) };
+  $('bk-f').onchange=async e=>{ const f=e.target.files[0]; e.target.value=''; if(!f) return;
+    try{ const j=JSON.parse(await f.text()); if(!j||!Array.isArray(j.att)) throw 0; const n=mergeIn(j); saveAll(); toast(n?'Backup restored':'Nothing new in that backup') }catch(err){ toast('That file isn\'t a CCNA backup') } };
+  $('x-reset').onclick=()=>{ const oldA=ATT, oldM=MIST; ATT=[]; MIST=[]; store('att',ATT); store('mist',MIST); store('ghSig',''); toast('Practice history cleared on this device',()=>{ ATT=oldA; MIST=oldM; store('att',ATT); store('mist',MIST) }) };
+  renderSyncStat();
+}
+
+/* =====================================================================
+   GitHub sync: one file, data/ccna.json
+   ===================================================================== */
+const DATA_PATH='data/ccna.json';
+const hasGH=()=>!!(GH&&GH.token&&GH.repo);
+function guessRepo(){ const h=location.hostname, seg=location.pathname.split('/').filter(Boolean)[0];
+  return /\.github\.io$/.test(h)&&seg&&!/\.html$/.test(seg)?h.split('.')[0]+'/'+seg:'' }
+function b64(text){ const b=new TextEncoder().encode(text); let o=''; for(let i=0;i<b.length;i+=0x8000) o+=String.fromCharCode(...b.subarray(i,i+0x8000)); return btoa(o) }
+function ghErr(code){
+  if(code===401) return 'GitHub says the key is wrong or expired. Make a new one and connect again.';
+  if(code===403||code===404) return 'That key can\'t write to '+GH.repo+'. Check the repo name and that the key has Contents: Read and write for it.';
+  return 'GitHub error '+code+'. Will try again next time you open the app.';
+}
+async function net(url,opt){ try{ return await fetch(url,opt) }catch(e){ throw new Error('Couldn\'t reach GitHub. Check your connection.') } }
+const ghHeaders=()=>({'Authorization':'Bearer '+GH.token,'Accept':'application/vnd.github+json'});
+const ghUrl=p=>'https://api.github.com/repos/'+GH.repo+'/contents/'+p;
+async function ghGet(path){ const g=await net(ghUrl(path)+'?t='+Date.now(),{headers:ghHeaders()}); if(g.status===404) return null; if(!g.ok) throw new Error(ghErr(g.status)); const j=await g.json(); return {sha:j.sha} }
+async function ghRaw(path){ const r=await net(ghUrl(path),{headers:{...ghHeaders(),'Accept':'application/vnd.github.raw'},cache:'no-cache'}); if(r.status===404) return null; if(!r.ok) throw new Error(ghErr(r.status)); return await r.text() }
+async function ghPut(path,text,msg){
+  for(let t=0;t<2;t++){ const cur=await ghGet(path); const body={message:msg,content:b64(text)}; if(cur) body.sha=cur.sha;
+    const r=await net(ghUrl(path),{method:'PUT',headers:ghHeaders(),body:JSON.stringify(body)}); if(r.ok) return; if(r.status!==409&&r.status!==422) throw new Error(ghErr(r.status)) }
+  throw new Error('GitHub kept rejecting the save. Will try again next time you open the app.');
+}
+function payload(){
+  const att=ATT.slice().sort((a,b)=>a[0]-b[0]||(a[1]<b[1]?-1:1));
+  return JSON.stringify({v:1,att,done:DONE,cur:CURDAY,mist:MIST.slice().sort((a,b)=>a.t-b.t),prefs:PREFS});
+}
+function mergeIn(r){
+  let ch=0;
+  const key=x=>x[0]+'|'+x[1], have=new Set(ATT.map(key));
+  for(const x of r.att||[]) if(Array.isArray(x)&&!have.has(key(x))){ ATT.push(x); have.add(key(x)); ch++ }
+  if(ch) ATT.sort((a,b)=>a[0]-b[0]);
+  for(const [id,v] of Object.entries(r.done||{})) if(!DONE[id]||(v.at||0)>(DONE[id].at||0)){ DONE[id]=v; ch++ }
+  if(r.cur&&(r.cur.at||0)>(CURDAY.at||0)){ CURDAY=r.cur; ch++ }
+  const mk=new Set(MIST.map(m=>m.id)); for(const m of r.mist||[]) if(m&&m.id&&!mk.has(m.id)){ MIST.push(m); ch++ }
+  if(ch){ MIST.sort((a,b)=>a.t-b.t); MIST=MIST.slice(-80) }
+  for(const k of ['version','exam']) if(r.prefs&&r.prefs[k]&&(r.prefs[k].at||0)>(PREFS[k].at||0)){ PREFS[k]=r.prefs[k]; ch++ }
+  if(ch){ store('att',ATT); store('done',DONE); store('cur',CURDAY); store('mist',MIST); store('prefs',PREFS) }
+  return ch;
+}
+async function pull(){
+  let text=null;
+  if(hasGH()){ try{ text=await ghRaw(DATA_PATH); if(text==null) return {ch:0,remote:''} }catch(e){ SYNCERR=e.message } }
+  if(text==null){ try{ const r=await fetch('./'+DATA_PATH,{cache:'no-cache'}); if(r.ok) text=await r.text() }catch(e){} }
+  if(!text) return {ch:0,remote:''};
+  try{ return {ch:mergeIn(JSON.parse(text)),remote:sig(text)} }catch(e){ return {ch:0,remote:''} }
+}
+let syncing=null, syncTimer=null;
+function syncSoon(){ if(!hasGH()) return; store('ghDirty',true); clearTimeout(syncTimer); syncTimer=setTimeout(syncNow,S?20000:2000) }
+async function syncNow(){
+  if(syncing) return syncing;
+  syncing=(async()=>{
+    try{ SYNCERR='';
+      const {ch,remote}=await pull();
+      if(ch&&CUR!=='drill'&&!$('sheet').classList.contains('on')) render(CUR);
+      if(hasGH()&&!SYNCERR){ const text=payload(), s=sig(text);
+        if(s!==remote&&s!==load('ghSig','')){ await ghPut(DATA_PATH,text,'CCNA progress '+todayKey()); store('ghSig',s) }
+        store('ghDirty',false); store('ghAt',Date.now()) }
+    }catch(e){ SYNCERR=e.message||String(e); store('ghDirty',true) }
+    renderSyncStat();
+  })();
+  try{ await syncing }finally{ syncing=null }
+}
+function renderSyncStat(){ const st=$('g-stat'); if(!st) return;
+  if(!hasGH()){ st.innerHTML='Not connected. Progress stays on this device only.'; return }
+  const at=load('ghAt',0);
+  st.innerHTML=SYNCERR?'<span class="bad">'+esc(SYNCERR)+'</span>':load('ghDirty',false)?'<span class="warn">Waiting to sync…</span>':'<span class="ok">Connected to '+esc(GH.repo)+'.</span>'+(at?' Last synced '+ago(at)+'.':'') }
+async function connectGH(){
+  const repo=$('g-repo').value.trim().replace(/^https?:\/\/github\.com\//,'').replace(/\.git$/,'').replace(/\/$/,'');
+  const token=$('g-token').value.replace(/[^\x21-\x7E]/g,'')||(GH&&GH.token)||'';
+  if(!/^[\w.-]+\/[\w.-]+$/.test(repo)){ $('g-stat').innerHTML='<span class="bad">Repo should look like owner/repo.</span>'; return }
+  if(!token){ $('g-stat').innerHTML='<span class="bad">Paste your GitHub key first.</span>'; return }
+  if(!GH||GH.repo!==repo||GH.token!==token) store('ghSig','');
+  GH={repo,token}; store('gh',GH); $('g-token').value=''; $('g-stat').textContent='Syncing…';
+  await syncNow(); renderSettings(); if(!SYNCERR) toast('Synced');
+}
+
+/* =====================================================================
+   nav + boot
+   ===================================================================== */
+function render(tab){ ({home:renderHome,practice:renderPractice,course:renderCourse,stats:renderStats,settings:renderSettings,drill:()=>{}})[tab]() }
+function show(tab,keep){
+  if(tab!=='drill'){ document.body.classList.remove('drilling'); clearInterval(clockIv); S=null }
+  CUR=tab;
+  document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+tab));
+  document.querySelectorAll('nav button').forEach(b=>b.setAttribute('aria-current',b.dataset.tab===tab));
+  window.scrollTo(0,0); if(!keep) render(tab);
+}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{ buzz(); show(b.dataset.tab) });
+$('opensettings').onclick=()=>show('settings');
+
+let LASTSYNC=0;
+function catchUp(force){ if(!force&&Date.now()-LASTSYNC<15000) return; LASTSYNC=Date.now(); syncNow() }
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') catchUp() });
+window.addEventListener('online',()=>catchUp(true));
+
+show('home');
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+if(navigator.storage&&navigator.storage.persist) navigator.storage.persist().catch(()=>{});
+catchUp(true);
+</script>
+</body>
+</html>
